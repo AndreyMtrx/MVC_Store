@@ -1,8 +1,16 @@
-﻿body {
+﻿@font-face {
+    font-family: 'Segoe UI Regular';
+    font-weight: 400;
+    src: url("https://webfonts.pro/templates/fonts/download/SegoeUI/SegoeUI.woff");
+}
+body {
+    font-family: 'Segoe UI Regular';
     padding-top: 50px;
     padding-bottom: 20px;
 }
-
+a{
+    text-decoration:none;
+}
 /* Set padding to keep content from hitting the edges */
 .body-content {
     padding-left: 15px;
@@ -16,9 +24,7 @@
     white-space: normal;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
+.admin_page-title{
+    margin-top:20px;
+    margin-bottom:20px;
 }

@@ -8,7 +8,6 @@ namespace MVC_Store.Areas.Admin.Controllers
 {
     public class PagesController : Controller
     {
-        // GET: Admin/Pages
         public ActionResult Index()
         {
             //Обьявляем список для представления
@@ -21,16 +20,13 @@ namespace MVC_Store.Areas.Admin.Controllers
             return View(pageList);
         }
 
-        // GET: Admin/Pages/AddPage
         [HttpGet]
         public ActionResult AddPage()
         {
             return View();
         }
 
-        // Post: Admin/Pages/AddPage
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult AddPage(PageViewModel pageViewModel)
         {
             //Проверка модели на валидность
@@ -62,8 +58,7 @@ namespace MVC_Store.Areas.Admin.Controllers
                     ModelState.AddModelError("", "That title already exist.");
                     return View(pageViewModel);
                 }
-
-                if (db.Pages.Any(x => x.Slug == slug))
+                else if (db.Pages.Any(x => x.Slug == slug))
                 {
                     ModelState.AddModelError("", "That slug already exist");
                     return View(pageViewModel);
@@ -81,6 +76,105 @@ namespace MVC_Store.Areas.Admin.Controllers
             //Передаем сообщение через tempdata
             TempData["SM"] = "You have added a new page";
 
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public ActionResult EditPage(int id)
+        {
+            PageViewModel pageViewModel;
+            using (Db db = new Db())
+            {
+                PagesDTO dto = db.Pages.Find(id);
+                if (dto == null)
+                {
+                    return Content("The page does not exist");
+                }
+                pageViewModel = new PageViewModel(dto);
+            }
+            return View(pageViewModel);
+        }
+
+        [HttpPost]
+        public ActionResult EditPage(PageViewModel pageViewModel)
+
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(pageViewModel);
+            }
+            using (Db db = new Db())
+            {
+                int id = pageViewModel.Id;
+                string slug = "home";
+
+                PagesDTO dto = db.Pages.Find(id);
+                dto.Title = pageViewModel.Title;
+
+                if (pageViewModel.Slug != "home")
+                {
+                    if (string.IsNullOrWhiteSpace(pageViewModel.Slug))
+                    {
+                        slug = pageViewModel.Title.Replace(" ", "-").ToLower();
+                    }
+                    else
+                    {
+                        slug = pageViewModel.Slug.Replace(" ", "-").ToLower();
+                    }
+                }
+
+                if (db.Pages.Where(x => x.Id != id).Any(x => x.Title == pageViewModel.Title))
+                {
+                    ModelState.AddModelError("", "That title already exist.");
+                    return View(pageViewModel);
+                }
+                else if (db.Pages.Where(x => x.Id != id).Any(x => x.Slug == pageViewModel.Slug))
+                {
+                    ModelState.AddModelError("", "That slug already exist.");
+                    return View(pageViewModel);
+                }
+
+                dto.Slug = slug;
+                dto.Body = pageViewModel.Body;
+                dto.HasSidebar = pageViewModel.HasSidebar;
+
+                db.SaveChanges();
+            }
+            TempData["SM"] = "You have edited the page";
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult PageDetails(int id)
+        {
+            PageViewModel pageViewModel;
+            using (Db db = new Db())
+            {
+                PagesDTO dto = db.Pages.Find(id);
+                if (dto == null)
+                {
+                    return Content("The page does not exist");
+                }
+                pageViewModel = new PageViewModel(dto);
+            }
+            return View(pageViewModel);
+        }
+
+        public ActionResult DeletePage(int id)
+        {
+            using (Db db = new Db())
+            {
+                PagesDTO dto = db.Pages.Find(id);
+
+                if (dto == null)
+                {
+                    return Content("That page does not exist");
+                }
+
+                db.Pages.Remove(dto);
+                db.SaveChanges();
+            }
+
+            TempData["DM"] = "You have deleted the page";
             return RedirectToAction("Index");
         }
     }

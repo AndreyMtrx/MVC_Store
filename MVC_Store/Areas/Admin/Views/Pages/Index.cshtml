@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Pages";
 }
-<h2>Pages</h2>
+<h2 class="admin_page-title">Pages</h2>
 
 @if (TempData["SM"] != null)
 {
@@ -10,18 +10,26 @@
         @TempData["SM"]
     </div>
 }
+@if (TempData["DM"] != null)
+{
+    <div class="alert alert-info">
+        @TempData["DM"]
+    </div>
+}
 <p>
     @Html.ActionLink("Create new page", "AddPage", "", new { @class = "btn btn-success" })
 </p>
 
-<table class="table">
-
-    <tr>
-        <th>Title</th>
-        <th>Slug</th>
-        <th>Sidebar</th>
-        <th></th>
-    </tr>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Slug</th>
+            <th>Sidebar</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
         @foreach (var item in Model)
         {
             <tr>
@@ -29,10 +37,35 @@
                 <td>@Html.DisplayFor(modelItem => item.Slug)</td>
                 <td>@Html.DisplayFor(modelItem => item.HasSidebar)</td>
                 <td>
-                    @Html.ActionLink("Edit", "EditPage", new { id = item.Id })
-                    @Html.ActionLink("Details", "PageDetails", new { id = item.Id })
-                    @Html.ActionLink("Delete", "DeletePage", new { id = item.Id })
+                    @Html.ActionLink("Edit", "EditPage", new { id = item.Id })&nbsp;|&nbsp;
+                    @Html.ActionLink("Details", "PageDetails", new { id = item.Id })&nbsp;|&nbsp;
+                    @if (item.Slug != "home")
+                    {
+                        @Html.ActionLink("Delete", "DeletePage", new { id = item.Id }, new { @class = "delete" })
+                    }
+                    else
+                    {
+                        <span class="text-primary">Delete</span>
+                    }
                 </td>
             </tr>
         }
+    </tbody>
 </table>
+
+@section Scripts
+{
+    <script>
+        $(function () {
+            /* Confirm page deletion */
+            $("a.delete").on("click", function () {
+                if (!confirm("Confirm page deletion")) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            });
+        });
+    </script>
+}
