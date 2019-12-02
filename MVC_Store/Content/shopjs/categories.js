@@ -76,51 +76,51 @@
     });
     /*Rename category script*/
     var originalTextBoxValue;
+    $("html:not(table#pages input.text-box)").click(function () {
+        $("table#pages input.text-box").attr("readonly", true);
+    });
 
     $("table#pages input.text-box").dblclick(function () {
         originalTextBoxValue = $(this).val();
+        $("table#pages input.text-box").attr("readonly", true);
         $(this).attr("readonly", false);
     });
 
     $("table#pages input.text-box").keyup(function (e) {
         if (e.keyCode == 13) {
-            $(this).blur();
-        }
-    });
+            var $this = $(this);
+            var newCatName = $this.val();
+            var id = $this.parent().parent().parent().parent().parent().attr("id")
+            console.log(id);
+            var str = ".ajaxdivtd#" + id;
+            var ajaxdiv = $this.parent().parent().parent().find(".ajaxdivtd");
+            console.log(str);
+            var url = "/admin/shop/RenameCategory";
 
-    $("table#pages input.text-box").blur(function () {
-        var $this = $(this);
-        var newCatName = $this.val();
-        var id = $this.parent().parent().parent().parent().parent().attr("id")
-        console.log(id);
-        var str = ".ajaxdivtd#" + id;
-        var ajaxdiv = $this.parent().parent().parent().find(".ajaxdivtd");
-        console.log(str);
-        var url = "/admin/shop/RenameCategory";
-
-        if (newCatName.length < 3) {
-            alert("Category name must be at least 3 characters long.");
-            $this.attr("readonly", true);
-            return false;
-        }
-
-        $.post(url, { newCatName: newCatName, id: id }, function (data) {
-            var response = data.trim();
-
-            if (response == "titletaken") {
-                $this.val(originalTextBoxValue);
-                ajaxdiv.html("<div class='alert alert-danger'>That title is taken!</div>").show();
+            if (newCatName.length < 3) {
+                alert("Category name must be at least 3 characters long.");
+                $this.attr("readonly", true);
+                return false;
             }
-            else {
-                ajaxdiv.html("<div class='alert alert-success'>The category name has been changed!</div>").show();
-            }
-            setTimeout(function () {
-                ajaxdiv.fadeOut("fast", function () {
-                    ajaxdiv.html("");
-                });
-            }, 3000);
-        }).done(function () {
-            $this.attr("readonly", true);
-        });
+
+            $.post(url, { newCatName: newCatName, id: id }, function (data) {
+                var response = data.trim();
+
+                if (response == "titletaken") {
+                    $this.val(originalTextBoxValue);
+                    ajaxdiv.html("<div class='alert alert-danger'>That title is taken!</div>").show();
+                }
+                else {
+                    ajaxdiv.html("<div class='alert alert-success'>The category name has been changed!</div>").show();
+                }
+                setTimeout(function () {
+                    ajaxdiv.fadeOut("fast", function () {
+                        ajaxdiv.html("");
+                    });
+                }, 3000);
+            }).done(function () {
+                $this.attr("readonly", true);
+            });
+        }
     });
 });
