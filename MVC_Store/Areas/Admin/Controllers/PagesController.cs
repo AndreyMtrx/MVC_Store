@@ -177,5 +177,28 @@ namespace MVC_Store.Areas.Admin.Controllers
             TempData["DM"] = "You have deleted the page";
             return RedirectToAction("Index");
         }
+        [HttpGet]
+        public ActionResult EditSidebar()
+        {
+            SidebarViewModel sidebarViewModel;
+            using(Db db = new Db())
+            {
+                SidebarDTO sidebarDTO = db.Sidebars.Find(1);
+                sidebarViewModel = new SidebarViewModel(sidebarDTO);
+            }
+            return View(sidebarViewModel);
+        }
+        [HttpPost]
+        public ActionResult EditSidebar(SidebarViewModel sidebarViewModel)
+        {
+            using(Db db = new Db())
+            {
+                SidebarDTO sidebarDTO = db.Sidebars.Find(1);
+                sidebarDTO.Body = sidebarViewModel.Body;
+                db.SaveChanges();
+            }
+            TempData["SM"] = "You have edited the sidebar";
+            return RedirectToAction("EditSidebar");
+        }
     }
 }

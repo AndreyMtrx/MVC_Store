@@ -1,10 +1,5 @@
-﻿@font-face {
-    font-family: 'Segoe UI Regular';
-    font-weight: 400;
-    src: url("https://webfonts.pro/templates/fonts/download/SegoeUI/SegoeUI.woff");
-}
+﻿
 body {
-    font-family: 'Segoe UI Regular';
     padding-top: 50px;
     padding-bottom: 20px;
 }
@@ -25,6 +20,12 @@ a{
 }
 
 .admin_page-title{
-    margin-top:20px;
-    margin-bottom:20px;
+    margin-top:30px;
+    margin-bottom:30px;
+}
+.new-cat{
+    position:relative;
+}
+.ajax-text{
+    display:none;
 }

@@ -1,0 +1,41 @@
+﻿@model MVC_Store.Models.ViewModels.Pages.SidebarViewModel
+
+@{
+    ViewBag.Title = "Edit sidebar";
+}
+
+<h2 class="admin_page-title">Edit sidebar</h2>
+
+@if (TempData["SM"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SM"]
+    </div>
+}
+<hr />
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.Body, new { @class = "control-label" })*@
+            @Html.TextAreaFor(model => model.Body, new { @class = "form-control col-md-6" })
+            @Html.ValidationMessageFor(model => model.Body, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Edit page" class="btn btn-success" />
+        </div>
+    </div>
+}
+
+@section Scripts
+{
+    <script>
+        CKEDITOR.replace("Body");
+    </script>
+}

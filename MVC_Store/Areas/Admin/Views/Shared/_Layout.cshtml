@@ -10,20 +10,17 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-        @Html.ActionLink("DashBoard", "Index", "DashBoard", new { @class = "navbar-brand" })
+        @Html.ActionLink("DashBoard", "Index", "DashBoard", "", new { @class = "navbar-brand" })
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    @Html.ActionLink("Pages", "Index", "Pages", "", new { @class = "nav-link" })
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Features</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Pricing</a>
+                    @Html.ActionLink("Sidebar", "EditSidebar", "Pages", "", new { @class = "nav-link" })
                 </li>
             </ul>
 
@@ -39,13 +36,14 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - мое приложение ASP.NET</p>
+            <p>&copy; @DateTime.Now.Year - My MVC Store</p>
         </footer>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryui")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/ckeditor")
     @RenderSection("scripts", required: false)
 </body>
 </html>
