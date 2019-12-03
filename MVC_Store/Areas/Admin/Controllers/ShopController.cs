@@ -1,9 +1,8 @@
 ﻿using MVC_Store.Models.Data;
 using MVC_Store.Models.ViewModels;
-using System;
+using MVC_Store.Models.ViewModels.Shop;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace MVC_Store.Areas.Admin.Controllers
@@ -13,17 +12,18 @@ namespace MVC_Store.Areas.Admin.Controllers
         public ActionResult Categories()
         {
             List<CategoryViewModel> categoryVMList;
-            using(Db db = new Db())
+            using (Db db = new Db())
             {
                 categoryVMList = db.Categories.ToArray().OrderBy(x => x.Sorting).Select(x => new CategoryViewModel(x)).ToList();
             }
             return View(categoryVMList);
         }
+
         [HttpPost]
         public string AddNewCategory(string catName)
         {
             string id;
-            using(Db db = new Db())
+            using (Db db = new Db())
             {
                 if (db.Categories.Any(x => x.Name == catName))
                 {
@@ -42,11 +42,13 @@ namespace MVC_Store.Areas.Admin.Controllers
             }
             return id;
         }
-        public ActionResult DeleteCategory(int id) {
-            using(Db db = new Db())
+
+        public ActionResult DeleteCategory(int id)
+        {
+            using (Db db = new Db())
             {
                 CategoryDTO categoryDTO = db.Categories.Find(id);
-                if(categoryDTO == null)
+                if (categoryDTO == null)
                 {
                     return Content("This category does not exist");
                 }
@@ -56,12 +58,13 @@ namespace MVC_Store.Areas.Admin.Controllers
             TempData["DM"] = "You have deleted the category";
             return RedirectToAction("Categories");
         }
+
         [HttpPost]
-        public string RenameCategory(string newCatName,int id)
+        public string RenameCategory(string newCatName, int id)
         {
-            using(Db db = new Db())
+            using (Db db = new Db())
             {
-                if(db.Categories.Any(x=>x.Name == newCatName))
+                if (db.Categories.Any(x => x.Name == newCatName))
                 {
                     return "titletaken";
                 }
@@ -70,9 +73,24 @@ namespace MVC_Store.Areas.Admin.Controllers
                 categoryDTO.Name = newCatName;
                 categoryDTO.Slug = newCatName.Replace(" ", "-").ToLower();
                 db.SaveChanges();
-
             }
             return "Fine";
+        }
+        [HttpGet]
+        public ActionResult AddProduct()
+        {
+            ProductViewModel productViewModel = new ProductViewModel();
+            using(Db db = new Db())
+            {
+                productViewModel.Categories = new SelectList(db.Categories.ToList(),dataValueField:"Id",dataTextField:"Name");
+            }
+            return View(productViewModel);
+        }
+        [HttpPost]
+        public ActionResult AddProduct(ProductViewModel productViewModel)
+        {
+
+            return View();
         }
     }
 }

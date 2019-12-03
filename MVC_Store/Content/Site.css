@@ -29,3 +29,15 @@ a{
 .ajax-text{
     display:none;
 }
+.back__btn{
+    position:relative;
+}
+.back__arrow {
+    width:27px;
+    height:27px;
+    position:absolute;
+    display:block;
+    left:-45px;
+    top:50%;
+    transform:translate(0,-50%);
+}

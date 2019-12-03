@@ -42,6 +42,7 @@
 
     </dl>
 </div>
-<p>
-    @Html.ActionLink("Back to pages", "Index", "", new { @class = "btn btn-info mt-5" })
-</p>
+<div class="mt-5 back__btn">
+    @Html.ActionLink("Back to pages", "Index", "", new { @class = "btn btn-primary" })
+    <img src="~/Content/img/left-pointing-arrow.svg" class="back__arrow" />
+</div>
