@@ -1,6 +1,7 @@
 ﻿using MVC_Store.Models.Data;
 using MVC_Store.Models.ViewModels;
 using MVC_Store.Models.ViewModels.Shop;
+using PagedList;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.IO;
@@ -169,7 +170,7 @@ namespace MVC_Store.Areas.Admin.Controllers
                     contentType != "image/x-png" &&
                     contentType != "image/png")
                 {
-                    using(Db db = new Db())
+                    using (Db db = new Db())
                     {
                         productViewModel.Categories = new SelectList(await db.Categories.ToListAsync(), "Id", "Name");
                         ModelState.AddModelError("", "The image was not uploaded - wrong image extension");
@@ -197,6 +198,25 @@ namespace MVC_Store.Areas.Admin.Controllers
             }
             TempData["SM"] = "You have successfully added a product.";
             return RedirectToAction("AddProduct");
+        }
+
+        public ActionResult Products(int? page, int? categoryId)
+        {
+            List<ProductViewModel> productVMList;
+            int pageNumber = page ?? 1;
+
+            using (Db db = new Db())
+            {
+                productVMList = db.Products.ToArray()
+                    .Where(x => categoryId == null || categoryId == 0 || x.CategoryId == categoryId)
+                    .Select(x => new ProductViewModel(x)).ToList();
+
+                ViewBag.Categories = new SelectList(db.Categories.ToList(), "Id", "Name");
+                ViewBag.SelectedCategory = (categoryId.ToString());
+            }
+            var onePageOfProducts = productVMList.ToPagedList(pageNumber, 3);
+            ViewBag.OnePageOfProducts = onePageOfProducts;
+            return View(productVMList);
         }
     }
 }
