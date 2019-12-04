@@ -2,8 +2,10 @@
 using MVC_Store.Models.ViewModels;
 using MVC_Store.Models.ViewModels.Shop;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
@@ -92,13 +94,13 @@ namespace MVC_Store.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddProduct(ProductViewModel productViewModel, HttpPostedFileBase file)
+        public async Task<ActionResult> AddProduct(ProductViewModel productViewModel, HttpPostedFileBase file)
         {
             if (!ModelState.IsValid)
             {
                 using (Db db = new Db())
                 {
-                    productViewModel.Categories = new SelectList(db.Categories.ToList(), "Id", "Name");
+                    productViewModel.Categories = new SelectList(await db.Categories.ToListAsync(), "Id", "Name");
                     return View(productViewModel);
                 }
             }
@@ -107,7 +109,7 @@ namespace MVC_Store.Areas.Admin.Controllers
             {
                 if (db.Products.Any(x => x.Name == productViewModel.Name))
                 {
-                    productViewModel.Categories = new SelectList(db.Categories.ToList(), "Id", "Name");
+                    productViewModel.Categories = new SelectList(await db.Categories.ToListAsync(), "Id", "Name");
                     ModelState.AddModelError("", "That product name is taken");
                     return View(productViewModel);
                 }
@@ -123,12 +125,12 @@ namespace MVC_Store.Areas.Admin.Controllers
                 productDTO.Price = productViewModel.Price;
                 productDTO.CategoryId = productViewModel.CategoryId;
 
-                CategoryDTO categoryDTO = db.Categories.FirstOrDefault(x => x.Id == productViewModel.CategoryId);
+                CategoryDTO categoryDTO = await db.Categories.FirstOrDefaultAsync(x => x.Id == productViewModel.CategoryId);
                 productDTO.CategoryName = categoryDTO.Name;
 
                 db.Products.Add(productDTO);
 
-                db.SaveChanges();
+                await db.SaveChangesAsync();
 
                 id = productDTO.Id;
             }
@@ -169,7 +171,7 @@ namespace MVC_Store.Areas.Admin.Controllers
                 {
                     using(Db db = new Db())
                     {
-                        productViewModel.Categories = new SelectList(db.Categories.ToList(), "Id", "Name");
+                        productViewModel.Categories = new SelectList(await db.Categories.ToListAsync(), "Id", "Name");
                         ModelState.AddModelError("", "The image was not uploaded - wrong image extension");
                         return View(productViewModel);
                     }
@@ -179,10 +181,10 @@ namespace MVC_Store.Areas.Admin.Controllers
 
                 using (Db db = new Db())
                 {
-                    ProductDTO productDTO = db.Products.Find(id);
+                    ProductDTO productDTO = await db.Products.FindAsync(id);
                     productDTO.ImageName = imageName;
 
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                 }
                 string imageOrigPath = string.Format($"{path2}\\{imageName}");
                 string imageThumbsPath = string.Format($"{path3}\\{imageName}");
