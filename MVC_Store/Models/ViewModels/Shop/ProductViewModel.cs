@@ -33,6 +33,7 @@ namespace MVC_Store.Models.ViewModels.Shop
         [Required]
         [DisplayName("Category")]
         public int CategoryId { get; set; }
+        [DisplayName("Image name")]
         public string ImageName { get; set; }
         public IEnumerable<SelectListItem> Categories { get; set; }
         public IEnumerable<string> GalleryImages { get; set; }
