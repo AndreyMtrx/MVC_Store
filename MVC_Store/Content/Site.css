@@ -1,10 +1,10 @@
-﻿
-body {
+﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
 }
-a{
-    text-decoration:none;
+
+a {
+    text-decoration: none;
 }
 /* Set padding to keep content from hitting the edges */
 .body-content {
@@ -19,25 +19,44 @@ a{
     white-space: normal;
 }
 
-.admin_page-title{
-    margin-top:30px;
-    margin-bottom:30px;
+.admin_page-title {
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
-.new-cat{
-    position:relative;
+
+.new-cat {
+    position: relative;
 }
-.ajax-text{
-    display:none;
+
+.ajax-text {
+    display: none;
 }
-.back__btn{
-    position:relative;
+
+.back__btn {
+    position: relative;
 }
+
 .back__arrow {
-    width:27px;
-    height:27px;
-    position:absolute;
-    display:block;
-    left:-45px;
-    top:50%;
-    transform:translate(0,-50%);
+    width: 27px;
+    height: 27px;
+    position: absolute;
+    display: block;
+    left: -45px;
+    top: 50%;
+    transform: translate(0,-50%);
+}
+
+.galleryStyle {
+    margin: 15px;
+    height: 260px;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.20), 0 10px 10px rgba(0,0,0,0.20);
+}
+
+.galleryStyle:hover {
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+.gallery_image{
+    margin:0 auto;
+    width:200px;
+    height:200px;
 }

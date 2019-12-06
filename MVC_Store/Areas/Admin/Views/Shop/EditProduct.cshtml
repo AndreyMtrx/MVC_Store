@@ -39,8 +39,8 @@
             @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
         </div>
         <div class="form-group mt-2">
-            @Html.LabelFor(model => model.ImageName, new { @class = "control-label" })
-            @Html.EditorFor(model => model.ImageName, new { htmlAttributes = new { @class = "form-control col-md-6 mb-3" } })
+            @Html.LabelFor(model => model.ImageName, new { @class = "control-label"})
+            @Html.EditorFor(model => model.ImageName, new { htmlAttributes = new { @class = "form-control col-md-6 mb-3", @readonly="readonly" } })
             <input type="file" name="file" id="imageUpload" class="form-control-file" />
             <br /><br />
             @if (Model.ImageName == null)
@@ -58,6 +58,7 @@
         <input type="submit" value="Edit product" class="btn btn-success mt-3" />
     </div>
 }
+<h2 class="mt-4">Product Gallery</h2>
 <hr />
 
 @if (!Model.GalleryImages.Any())
@@ -73,15 +74,21 @@
 </form>
 <br />
 <br />
-
-@foreach (var image in Model.GalleryImages)
-{
-    <div style="display: inline-block">
-        <img src="/Images/Uploads/Products/@Model.Id/Gallery/Thumbs/@image" alt="" />
-        @Html.ActionLink("Delete", "DeleteImage", "Shop", new { @class = "deleteimage", data_name = image })
-    </div>
-}
-
+<div class="row">
+    @foreach (var image in Model.GalleryImages)
+    {
+        <div class="col">
+            <div class="galleryStyle">
+                <div class="gallery_image">
+                    <img src="/Images/Uploads/Products/@Model.Id/Gallery/Thumbs/@image"/>
+                    </div>
+                <div class="text-center">
+                    @Html.ActionLink("Delete", "DeleteImage", "Shop", new { @class = "deleteimage btn btn-danger", data_name = image, style = "margin:10px" })
+                    </div>
+            </div>
+        </div>
+    }
+</div>
 <div class="mt-5 back__btn">
     @Html.ActionLink("Back to products", "Products", "", new { @class = "btn btn-primary" })
     <img src="~/Content/img/left-pointing-arrow.svg" class="back__arrow" />
@@ -93,4 +100,44 @@
 {
     <script src="~/Scripts/dropzone/dropzone.js"></script>
     <script src="~/Content/shopjs/addproduct.js"></script>
+
+    <script>
+
+        /* Dropzone js*/
+
+        Dropzone.options.dropzoneForm = {
+            acceptedFiles: "image/*",
+            init: function () {
+                this.on("complete",
+                    function (file) {
+                        if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+                            location.reload();
+                        }
+                    });
+                this.on("sending",
+                    function (file, xhr, formData) {
+                        formData.append("id",  @Model.Id);
+                    });
+            }
+        };
+
+        /*-----------------------------------------------------------*/
+            /* Delete gallery image */
+
+            $("a.deleteimage").click(function(e) {
+                e.preventDefault();
+
+                if (!confirm("Confirm deletion")) return false;
+
+                var $this = $(this);
+                var url = "/admin/shop/DeleteImage";
+                var imageName = $this.data("name");
+
+                $.post(url, { id: @Model.Id, imageName: imageName }, function(data) {
+                    $this.parent().parent().parent().fadeOut("slow");
+                });
+            });
+
+            /*-----------------------------------------------------------*/
+    </script>
 }
