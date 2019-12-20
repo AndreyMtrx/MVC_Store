@@ -1,0 +1,44 @@
+﻿@model IEnumerable<MVC_Store.Models.Cart.CartViewModel>
+
+@{
+    ViewBag.Title = "Cart details";
+}
+
+<h2>Cart details</h2>
+
+@if (ViewBag.Message != null)
+{
+    <h3>@ViewBag.Message</h3>
+}
+else
+{
+    foreach (var item in Model)
+    {
+        <hr />
+        <div>
+            <div>
+                @item.ProductName
+            </div>
+            <div>
+                @item.Quantity
+            </div>
+            <div>
+                @item.Price
+            </div>
+            <div>
+                @item.Image
+            </div>
+            <div>
+                <a class="incproduct" href="#" data-id="@item.ProductId">+</a>
+                <a class="decproduct" href="#" data-id="@item.ProductId">-</a>
+                <a class="removeproduct" href="#" data-id="@item.ProductId">remove</a>
+            </div>
+            <div>
+                @item.TotalPrice UAH
+            </div>
+            <div>
+                @ViewBag.TotalPriceCart
+            </div>
+        </div>
+    }
+}

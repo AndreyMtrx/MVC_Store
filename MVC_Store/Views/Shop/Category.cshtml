@@ -1,0 +1,30 @@
+﻿@model IEnumerable<MVC_Store.Models.ViewModels.Shop.ProductViewModel>
+
+@{
+    ViewBag.Title = ViewBag.CategoryName;
+}
+
+<h2 class="mb-4">@ViewBag.CategoryName</h2>
+
+<div class="products">
+    @foreach (var product in Model)
+    {
+        <div class="product">
+            <div class="product-title"><a href="/shop/product-details/@product.Slug">@product.Name</a></div>
+            <div class="product-photo">
+                <a href="/shop/product-details/@product.Slug">
+                    <img src="/Images/Uploads/Products/@product.Id/Thumbs/@product.ImageName" alt="product" />
+                </a>
+            </div>
+            <div class="product-price">@product.Price <span>UAH</span></div>
+            <div class="product-btn">
+                @Html.ActionLink("Add to cart", "", "", "", new { @class = "btn btn-outline-primary w-100" })
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts
+{
+    <script src="~/Content/shopjs/products.js"></script>
+}

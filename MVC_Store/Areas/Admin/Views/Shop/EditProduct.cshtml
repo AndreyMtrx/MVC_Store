@@ -16,43 +16,44 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.Name, new { @class = "control-label" })
-            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control col-md-6" } })
-            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.Description, new { @class = "control-label" })
-            @Html.TextAreaFor(model => model.Description, new { @class = "form-control col-md-6" })
-            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.Price, new { @class = "control-label" })
-            @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control col-md-6" } })
-            @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.CategoryId, new { @class = "control-label" })
-            @Html.DropDownListFor(model => model.CategoryId, Model.Categories, new { @class = "form-control col-md-6" })
-            @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
-        </div>
-        <div class="form-group mt-2">
-            @Html.LabelFor(model => model.ImageName, new { @class = "control-label"})
-            @Html.EditorFor(model => model.ImageName, new { htmlAttributes = new { @class = "form-control col-md-6 mb-3", @readonly="readonly" } })
-            <input type="file" name="file" id="imageUpload" class="form-control-file" />
-            <br /><br />
-            @if (Model.ImageName == null)
-            {
-                <img src="~/Content/img/no_image.png" id="imgpreview" />
-            }
-            else
-            {
-                <img src="~/Images/Uploads/Products/@Model.Id/Thumbs/@Model.ImageName" id="imgpreview" />
-            }
-        </div>
+<div class="form-horizontal">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.Name, new { @class = "control-label" })
+        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control col-md-6" } })
+        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
     </div>
+    <div class="text-info">Headers wrap in h3 tag &dArr;</div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Description, new { @class = "control-label" })
+        @Html.TextAreaFor(model => model.Description, new { @class = "form-control col-md-6" })
+        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Price, new { @class = "control-label" })
+        @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control col-md-6" } })
+        @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.CategoryId, new { @class = "control-label" })
+        @Html.DropDownListFor(model => model.CategoryId, Model.Categories, new { @class = "form-control col-md-6" })
+        @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group mt-2">
+        @Html.LabelFor(model => model.ImageName, new { @class = "control-label" })
+        @Html.EditorFor(model => model.ImageName, new { htmlAttributes = new { @class = "form-control col-md-6 mb-3", @readonly = "readonly" } })
+        <input type="file" name="file" id="imageUpload" class="form-control-file" />
+        <br /><br />
+        @if (Model.ImageName == null)
+        {
+            <img src="~/Content/img/no_image.png" id="imgpreview" />
+        }
+        else
+        {
+            <img src="~/Images/Uploads/Products/@Model.Id/Thumbs/@Model.ImageName" id="imgpreview" />
+        }
+    </div>
+</div>
 
     <div class="form-group">
         <input type="submit" value="Edit product" class="btn btn-success mt-3" />

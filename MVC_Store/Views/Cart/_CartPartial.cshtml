@@ -1,0 +1,7 @@
+﻿@model MVC_Store.Models.Cart.CartViewModel
+
+    <div class="ajax-cart">
+        Your cart: @Model.Quantity item(s) - @Model.Price UAH
+        <br />
+        @Html.ActionLink("Checkout", "Index")
+    </div>

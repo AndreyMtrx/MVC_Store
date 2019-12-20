@@ -4,42 +4,55 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - Matrix Shop</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-        <a class="navbar-brand" href="#">Navbar w/ text</a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" id="layoutNav">
+        <a class="navbar-brand" href="/">Matrix shop</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                <li class="nav-item">
+                    @Html.ActionLink("About us","","","",new{@class="nav-link"})
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Features</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Pricing</a>
+                    @Html.ActionLink("Contacts", "", "", "", new { @class = "nav-link" })
                 </li>
             </ul>
             <span class="navbar-text">
-                Navbar text with an inline element
+                @Html.Action("CartPartial","Cart")
             </span>
         </div>
     </nav>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
+    <div class="container-custom">
+        <div class="row flex-xl-nowrap">
+            <div class="col-md-2 list-group sidebar-categories">
+                @Html.Action("CategoryMenuPartial", "Shop")
+            </div>
+            <div class="col-md-8">
+                @RenderBody()
+            </div>
+            <div class="col-md-2">
+                <form class="form-inline">
+                    <input class="form-control ml-auto mr-3 w-100" type="search" placeholder="Search..." aria-label="Search">
+                    <button class="btn btn-outline-primary ml-auto mr-3 mt-2 position-relative" type="submit">
+                        <img class="right-arrow-layout" src="~/Content/img/right.svg" alt="img" />Search
+                    </button>
+                </form>
+            </div>
+        </div>`
         <footer>
-            <p>&copy; @DateTime.Now.Year - мое приложение ASP.NET</p>
+            <p>&copy; @DateTime.Now.Year - Matrix shop</p>
         </footer>
+        <hr />
     </div>
 
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/scripts")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>

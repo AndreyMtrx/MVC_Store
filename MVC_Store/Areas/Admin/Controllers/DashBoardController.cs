@@ -5,7 +5,7 @@ namespace MVC_Store.Areas.Admin.Controllers
     public class DashBoardController : Controller
     {
         // GET: Admin/DashBoard
-        public ActionResult Index()
+        public ViewResult Index()
         {
             return View();
         }

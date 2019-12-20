@@ -1,4 +1,5 @@
 ﻿$(function () {
+    //Admin zone
     $("#SelectCategory").change(function () {
         var url = $(this).val();
 
@@ -13,4 +14,13 @@
             return false;
         }
     });
+
+    //UI zone
+    var productsCount = $(".product").length;
+
+    if (productsCount < 3) {
+        $(".products").css("justify-content", "normal");
+        $(".product").css("margin-right", "15px");
+    };
+
 });

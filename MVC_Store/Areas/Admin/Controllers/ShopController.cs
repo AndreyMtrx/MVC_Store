@@ -15,7 +15,7 @@ namespace MVC_Store.Areas.Admin.Controllers
 {
     public class ShopController : Controller
     {
-        public ActionResult Categories()
+        public ViewResult Categories()
         {
             List<CategoryViewModel> categoryVMList;
             using (Db db = new Db())
@@ -38,7 +38,7 @@ namespace MVC_Store.Areas.Admin.Controllers
 
                 CategoryDTO categoryDTO = new CategoryDTO();
                 categoryDTO.Name = catName;
-                categoryDTO.Slug = catName.Replace(" ", "-").ToLower();
+                categoryDTO.Slug = catName.Replace(" ", "-").Replace("/", "-").ToLower();
                 categoryDTO.Sorting = 100;
 
                 db.Categories.Add(categoryDTO);
@@ -77,14 +77,14 @@ namespace MVC_Store.Areas.Admin.Controllers
 
                 CategoryDTO categoryDTO = db.Categories.Find(id);
                 categoryDTO.Name = newCatName;
-                categoryDTO.Slug = newCatName.Replace(" ", "-").ToLower();
+                categoryDTO.Slug = newCatName.Replace(" ", "-").Replace("/", "-").ToLower();
                 db.SaveChanges();
             }
             return "Fine";
         }
 
         [HttpGet]
-        public ActionResult AddProduct()
+        public ViewResult AddProduct()
         {
             ProductViewModel productViewModel = new ProductViewModel();
             using (Db db = new Db())
@@ -121,7 +121,7 @@ namespace MVC_Store.Areas.Admin.Controllers
             {
                 ProductDTO productDTO = new ProductDTO();
                 productDTO.Name = productViewModel.Name;
-                productDTO.Slug = productViewModel.Name.Replace(" ", "-").ToLower();
+                productDTO.Slug = productViewModel.Name.Replace(" ", "-").Replace("/", "-").ToLower();
                 productDTO.Description = productViewModel.Description;
                 productDTO.Price = productViewModel.Price;
                 productDTO.CategoryId = productViewModel.CategoryId;
@@ -193,14 +193,14 @@ namespace MVC_Store.Areas.Admin.Controllers
                 file.SaveAs(imageOrigPath);
 
                 WebImage img = new WebImage(file.InputStream);
-                img.Resize(200, 200,false);
+                img.Resize(250, 200,false).Crop(1,1);
                 img.Save(imageThumbsPath);
             }
             TempData["SM"] = "You have successfully added a product.";
             return RedirectToAction("AddProduct");
         }
 
-        public ActionResult Products(int? page, int? categoryId)
+        public ViewResult Products(int? page, int? categoryId)
         {
             List<ProductViewModel> productVMList;
             int pageNumber = page ?? 1;
@@ -272,7 +272,7 @@ namespace MVC_Store.Areas.Admin.Controllers
             {
                 ProductDTO productDTO = db.Products.Find(id);
                 productDTO.Name = productViewModel.Name;
-                productDTO.Slug = productViewModel.Name.Replace(" ", "-").ToLower();
+                productDTO.Slug = productViewModel.Name.Replace(" ", "-").Replace("/", "-").ToLower();
                 productDTO.Description = productViewModel.Description;
                 productDTO.Price = productViewModel.Price;
                 productDTO.CategoryId = productViewModel.CategoryId;
@@ -332,7 +332,7 @@ namespace MVC_Store.Areas.Admin.Controllers
                 file.SaveAs(finalPath1);
 
                 WebImage img = new WebImage(file.InputStream);
-                img.Resize(200, 200,false);
+                img.Resize(250, 200,false).Crop(1,1);
                 img.Save(finalPath2);
             }
             TempData["SM"] = "You have successfully edited the product";
@@ -384,7 +384,7 @@ namespace MVC_Store.Areas.Admin.Controllers
                     file.SaveAs(path1);
 
                     WebImage img = new WebImage(file.InputStream);
-                    img.Resize(200, 200,false);
+                    img.Resize(250, 200,false).Crop(1,1);
                     img.Save(path2);
                 }
             }
@@ -392,8 +392,8 @@ namespace MVC_Store.Areas.Admin.Controllers
         [HttpPost]
         public void DeleteImage(int id, string imageName)
         {
-            string fullPath1 = Request.MapPath("~/Images/Uploads/" + id.ToString() + "/Gallery/" + imageName);
-            string fullPath2 = Request.MapPath("~/Images/Uploads/" + id.ToString() + "/Gallery/Thumbs/" + imageName);
+            string fullPath1 = Request.MapPath("~/Images/Uploads/Products/" + id.ToString() + "/Gallery/" + imageName);
+            string fullPath2 = Request.MapPath("~/Images/Uploads/Products/" + id.ToString() + "/Gallery/Thumbs/" + imageName);
 
             if (System.IO.File.Exists(fullPath1))
             {

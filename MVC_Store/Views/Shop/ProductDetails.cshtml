@@ -1,0 +1,90 @@
+﻿@model MVC_Store.Models.ViewModels.Shop.ProductViewModel
+
+@{
+    ViewBag.Title = Model.Name;
+}
+<div class="product-title-code mt-3 mb-3">
+    <h3 class="product-name-title">@Model.Name</h3>
+</div>
+
+<div class="product-nav">
+    <ul class="go-to-list">
+        <li class="go-to-item">Go to:</li>
+        <li class="go-to-item go-to-item--active">Photo</li>
+        <li class="go-to-item">
+            <a href="#product_description">Description</a>
+        </li>
+        <li class="go-to-item">
+            <a href="#product-reviews">Reviews</a>
+        </li>
+    </ul>
+</div>
+<div class="product-main row align-items-center">
+    <div class="product-details-image col-md-6">
+        <div class="product-details-image-wrapper">
+            <img src="~/Images/Uploads/Products/@Model.Id/@Model.ImageName" alt="img" />
+        </div>
+    </div>
+    <div class="product-short-info col-md-6">
+        <div class="product-code">Product code: <span class="d-block font-weight-bold">@Model.Id</span></div>
+        <div class="in-stock">In stock</div>
+        <div class="product-details-price">@Model.Price <span>UAH</span></div>
+        <div class="btn-loader addtocart">
+            <a class="addtocart btn btn-outline-primary w-50" href="#">Add to cart</a>
+            <span class="loader mb-1">
+                <img src="~/Content/img/ajax-loader.gif" alt="loader" width="50" height="50" />
+            </span>
+        </div>
+        <div class="ajaxmsg alert alert-success">The product has been added to your cart</div>
+    </div>
+</div>
+<div class="row fancyboximages">
+    <div class="col-md-12 fancyboxdiv">
+        <div class="row">
+            @foreach (var image in Model.GalleryImages)
+            {
+                <div class="fancyboximage col text-center">
+                    <a class="fancybox" href="/Images/Uploads/Products/@Model.Id/Gallery/@image" rel="gallery1">
+                        <img class="gallery-img" src="/Images/Uploads/Products/@Model.Id/Gallery/Thumbs/@image" alt="img" />
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div class="product-description">
+    <div class="description-title">
+        <h2>Description</h2>
+        <img class="arrow-down" src="~/Content/img/left-pointing-arrow.svg" alt="arrow-down" width="25" height="25" />
+    </div>
+    @Html.Raw(Model.Description)
+</div>
+@section Scripts
+{
+    <link href="~/Content/jquery.fancybox.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery.fancybox.js"></script>
+    <script src="~/Content/shopjs/productdetails.js"></script>
+
+    <script>
+        $(function () {
+            $("a.addtocart").click(function (e) {
+                e.preventDefault();
+
+                $(".loader").addClass("visible")
+
+                var url = "/cart/AddToCartPartial";
+
+                $.get(url, { id: @Model.Id}, function (data) {
+                    $(".ajax-cart").html(data);
+                }).done(function () {
+                    $(".loader").removeClass("visible");
+                    $(".ajaxmsg").css("opacity","1");
+
+                    setTimeout(function () {
+                        $(".ajaxmsg").fadeTo(400,0);
+                    },2000);
+                });
+            });
+        });
+    </script>  
+}
