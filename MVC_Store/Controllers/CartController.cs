@@ -38,9 +38,9 @@ namespace MVC_Store.Controllers
 
             if (Session["cart"] != null)
             {
-                var list = (List<CartViewModel>)Session["cart"];
+                List<CartViewModel> cart = Session["cart"] as List<CartViewModel> ?? new List<CartViewModel>();
 
-                foreach (var item in list)
+                foreach (var item in cart)
                 {
                     quantity += item.Quantity;
                     price += item.Quantity * item.Price;
@@ -98,6 +98,30 @@ namespace MVC_Store.Controllers
             Session["cart"] = cart;
 
             return PartialView("_AddToCartPartial", cartViewModel);
+        }
+
+        public JsonResult IncrementProduct(int productId)
+        {
+            List<CartViewModel> cart = Session["cart"] as List<CartViewModel> ?? new List<CartViewModel>();
+            CartViewModel cartViewModel = cart.FirstOrDefault(x => x.ProductId == productId);
+
+            cartViewModel.Quantity++;
+
+            var result = new { qty = cartViewModel.Quantity, price = cartViewModel.Price };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DecrementProduct(int productId)
+        {
+            List<CartViewModel> cart = Session["cart"] as List<CartViewModel> ?? new List<CartViewModel>();
+            CartViewModel cartViewModel = cart.FirstOrDefault(x => x.ProductId == productId);
+
+            cartViewModel.Quantity--;
+
+            var result = new { qty = cartViewModel.Quantity, price = cartViewModel.Price };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

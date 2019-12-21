@@ -2,4 +2,5 @@
 
 Your cart: @Model.Quantity item(s) - @Model.Price UAH
 <br />
-@Html.ActionLink("Checkout", "Index")
+@Html.ActionLink("Cart", "Index", "", new { @class = "font-weight-bold" })
+<img class="cart-icon" src="~/Content/img/shopping-cart (1).svg" alt="cart" />

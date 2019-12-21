@@ -1,7 +1,8 @@
 ﻿@model MVC_Store.Models.Cart.CartViewModel
 
-    <div class="ajax-cart">
-        Your cart: @Model.Quantity item(s) - @Model.Price UAH
-        <br />
-        @Html.ActionLink("Checkout", "Index")
-    </div>
+<div class="ajax-cart text-right">
+    Your cart: <span class="cart-qty-layout">@Model.Quantity</span> item(s) - <span class="cart-price-layout">@Model.Price</span> UAH
+    <br />
+    @Html.ActionLink("Cart", "Index", "", new { @class = "font-weight-bold" })
+    <img class="cart-icon" src="~/Content/img/shopping-cart (1).svg" alt="cart" />
+</div>

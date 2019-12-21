@@ -187,7 +187,10 @@
     <Content Include="Content\jquery.fancybox.css" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\shopjs\addproduct.js" />
+    <Content Include="Content\shopjs\cart.js" />
     <Content Include="Content\shopjs\categories.js" />
+    <Content Include="Content\shopjs\decrementproduct.js" />
+    <Content Include="Content\shopjs\incrementproduct.js" />
     <Content Include="Content\shopjs\productdetails.js" />
     <Content Include="Content\shopjs\products.js" />
     <Content Include="favicon.ico" />

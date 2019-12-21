@@ -4,41 +4,53 @@
     ViewBag.Title = "Cart details";
 }
 
-<h2>Cart details</h2>
-
 @if (ViewBag.Message != null)
 {
     <h3>@ViewBag.Message</h3>
 }
 else
 {
-    foreach (var item in Model)
-    {
-        <hr />
-        <div>
-            <div>
-                @item.ProductName
-            </div>
-            <div>
-                @item.Quantity
-            </div>
-            <div>
-                @item.Price
-            </div>
-            <div>
-                @item.Image
-            </div>
-            <div>
-                <a class="incproduct" href="#" data-id="@item.ProductId">+</a>
-                <a class="decproduct" href="#" data-id="@item.ProductId">-</a>
-                <a class="removeproduct" href="#" data-id="@item.ProductId">remove</a>
-            </div>
-            <div>
-                @item.TotalPrice UAH
-            </div>
-            <div>
-                @ViewBag.TotalPriceCart
+    <div class="cart">
+        <div class="cart-header row">
+            <h3 class="col-md-7">Your cart</h3>
+            <div class="col-md-2 text-center text-secondary">Quantity</div>
+            <div class="col-md-3 text-right text-secondary">Price</div>
+        </div>
+        <hr>
+        <div class="cart-body">
+            @foreach (var item in Model)
+            {
+                <div class="cart-item row">
+                    <div class="cart-item-main col-md-7">
+                        <div class="mb-4">
+                            <img src="/Images/Uploads/Products/@item.ProductId/Thumbs/@item.Image" alt="img" />
+                        </div>
+                        <div class="cart-item-name">@item.ProductName</div>
+                    </div>
+                    <div class="cart-item-quantity col-md-2">
+                        <a class="decproduct" href="#" data-id="@item.ProductId"></a>
+                        <span class="qty@(item.ProductId) qty">@item.Quantity</span>
+                        <a class="incproduct" href="#" data-id="@item.ProductId"></a>
+                    </div>
+                    <div class="col-md-3 text-right font-weight-bold total@(item.ProductId)">@item.TotalPrice UAH</div>
+                    <div class="fav-remove-btns">
+                        <a class="btn btn-outline-danger removeproduct" href="#">Remove</a>
+                        <a class="btn btn-outline-info ml-3" href="#">Add to favourites</a>
+                    </div>
+                </div>
+                <hr />
+            }
+            <div class="row">
+                <div class="col-md-6">
+                    @Html.ActionLink("Checkout", "", "", new { @class = "btn btn-success btn-lg mt-3" })
+                </div>
+                <div class="cart-total-price col-md-6">Total price: <span>@ViewBag.TotalPriceCart</span> UAH</div>
             </div>
         </div>
-    }
+    </div>
+}
+
+@section Scripts
+{
+    <script src="~/Content/shopjs/cart.js"></script>
 }
