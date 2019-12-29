@@ -17,19 +17,19 @@
         $.getJSON(url, { productId: productId }, function (data) {
             $(".qty" + productId).html(data.qty);
 
-            var price = (data.qty * data.price).toFixed(2);
+            var price = data.qty * data.price;
             var priceHtml = price + " UAH";
             $(".total" + productId).html(priceHtml);
 
-            var cartTotal = parseFloat($(".cart-total-price span").text())
-            var cartTotalFin = (cartTotal + data.price).toFixed(2);
+            var cartTotal = parseInt($(".cart-total-price span").text())
+            var cartTotalFin = cartTotal + data.price;
             $(".cart-total-price span").html(cartTotalFin);
 
             var cartQtyLayout = parseInt($("span.cart-qty-layout").text());
             $("span.cart-qty-layout").text(cartQtyLayout + 1);
 
-            var cartPriceLayout = parseFloat($("span.cart-price-layout").text());
-            $("span.cart-price-layout").text((cartPriceLayout + data.price).toFixed(2));
+            var cartPriceLayout = parseInt($("span.cart-price-layout").text());
+            $("span.cart-price-layout").text(cartPriceLayout + data.price);
         });
     });
 
@@ -48,19 +48,45 @@
         $.getJSON(url, { productId: productId }, function (data) {
             $(".qty" + productId).html(data.qty);
 
-            var price = (data.qty * data.price).toFixed(2);
+            var price = data.qty * data.price;
             var priceHtml = price + " UAH";
             $(".total" + productId).html(priceHtml);
 
-            var cartTotal = parseFloat($(".cart-total-price span").text())
-            var cartTotalFin = (cartTotal - data.price).toFixed(2);
+            var cartTotal = parseInt($(".cart-total-price span").text())
+            var cartTotalFin = cartTotal - data.price;
             $(".cart-total-price span").html(cartTotalFin);
 
             var cartQtyLayout = parseInt($("span.cart-qty-layout").text());
             $("span.cart-qty-layout").text(cartQtyLayout - 1);
 
-            var cartPriceLayout = parseFloat($("span.cart-price-layout").text());
-            $("span.cart-price-layout").text((cartPriceLayout - data.price).toFixed(2));
+            var cartPriceLayout = parseInt($("span.cart-price-layout").text());
+            $("span.cart-price-layout").text(cartPriceLayout - data.price);
+        });
+    });
+
+    $("a.removeproduct").click(function (e) {
+        e.preventDefault();
+
+        var url = "/cart/RemoveProduct";
+        var productId = $(this).data("id");
+
+        $(this).closest(".cart-item").slideUp(300);
+        $(".hr" + productId).hide();
+
+        $.getJSON(url, { productId: productId }, function (data) {
+            var cartQtyLayout = parseInt($("span.cart-qty-layout").text());
+            $("span.cart-qty-layout").text(cartQtyLayout - data.quantity);
+
+            var cartPriceLayout = parseInt($("span.cart-price-layout").text());
+            $("span.cart-price-layout").text(cartPriceLayout - data.totalPrice);
+
+            var cartTotal = parseInt($(".cart-total-price span").text())
+            var cartTotalFin = cartTotal - data.totalPrice;
+            $(".cart-total-price span").html(cartTotalFin);
+
+            if (data.isEmpty == true) {
+                $(".checkout-btn").hide();
+            }
         });
     });
 });

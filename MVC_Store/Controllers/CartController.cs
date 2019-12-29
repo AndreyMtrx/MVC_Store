@@ -123,5 +123,32 @@ namespace MVC_Store.Controllers
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult RemoveProduct(int productId)
+        {
+            List<CartViewModel> cart = Session["cart"] as List<CartViewModel> ?? new List<CartViewModel>();
+            CartViewModel cartViewModel = cart.FirstOrDefault(x => x.ProductId == productId);
+
+            cart.Remove(cartViewModel);
+
+            bool isEmpty;
+            if (cart.Count == 0)
+            {
+                isEmpty = true;
+            }
+            else
+            {
+                isEmpty = false;
+            }
+
+            var result = new
+            {
+                totalPrice = cartViewModel.TotalPrice,
+                quantity = cartViewModel.Quantity,
+                isEmpty = isEmpty
+            };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
 }

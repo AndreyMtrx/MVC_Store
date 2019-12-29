@@ -29,7 +29,7 @@ namespace MVC_Store.Models.ViewModels.Shop
         [Required]
         [AllowHtml]
         public string Description { get; set; }
-        public decimal Price { get; set; }
+        public int Price { get; set; }
         public string CategoryName { get; set; }
         [Required]
         [DisplayName("Category")]

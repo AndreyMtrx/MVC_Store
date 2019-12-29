@@ -34,15 +34,15 @@ else
                     </div>
                     <div class="col-md-3 text-right font-weight-bold total@(item.ProductId)">@item.TotalPrice UAH</div>
                     <div class="fav-remove-btns">
-                        <a class="btn btn-outline-danger removeproduct" href="#">Remove</a>
+                        <a class="btn btn-outline-danger removeproduct" href="#" data-id="@item.ProductId">Remove</a>
                         <a class="btn btn-outline-info ml-3" href="#">Add to favourites</a>
                     </div>
                 </div>
-                <hr />
+                <hr class="hr@(item.ProductId)"/>
             }
             <div class="row">
                 <div class="col-md-6">
-                    @Html.ActionLink("Checkout", "", "", new { @class = "btn btn-success btn-lg mt-3" })
+                    @Html.ActionLink("Checkout", "", "", new { @class = "btn btn-success btn-lg mt-3 checkout-btn" })
                 </div>
                 <div class="cart-total-price col-md-6">Total price: <span>@ViewBag.TotalPriceCart</span> UAH</div>
             </div>
