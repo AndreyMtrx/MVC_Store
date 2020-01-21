@@ -19,7 +19,7 @@
             <div class="product-price">
                 @product.Price <span>UAH</span></div>
             <div class="product-btn">
-                @Html.ActionLink("Add to cart", "", "", "", new { @class = "btn btn-outline-primary w-100" })
+                <a class="btn btn-outline-primary w-100 addtocart" href="/Cart/AddToCartPartial/@product.Id" data-id="@product.Id">Add to cart</a>
             </div>
         </div>
     }
@@ -28,4 +28,20 @@
 @section Scripts
 {
     <script src="~/Content/shopjs/products.js"></script>
+    <script>
+        $(function () {
+            $("a.addtocart").click(function (e) {
+                e.preventDefault();
+
+                var id = $(this).data("id");
+                var url = "/cart/AddToCartPartial";
+
+                $.get(url, { id: id}, function (data) {
+                    $(".ajax-cart").html(data);
+                }).done(function () {
+                    var url = "/cart/AddToCartPartial";
+                });
+            });
+        });
+    </script>
 }

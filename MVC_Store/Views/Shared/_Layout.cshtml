@@ -23,9 +23,22 @@
                     @Html.ActionLink("Contacts", "", "", "", new { @class = "nav-link" })
                 </li>
             </ul>
-            <span class="navbar-text">
-                @Html.Action("CartPartial", "Cart")
-            </span>
+            <div class="navbar-text">
+                @if (Request.IsAuthenticated&&User.IsInRole("User"))
+                {
+                    <div class="d-inline-block align-top mr-3">
+                        @Html.Action("UserNavPartial", "Account")
+                        @Html.ActionLink("Logout", "Logout", "Account", "", new { @class = "ml-3 d-block text-right text-decoration-none font-weight-bolder" })
+                    </div>
+                }
+                else
+                {
+                    <div class="d-inline-block align-top mr-3">
+                        @Html.ActionLink("Login", "Login", "Account", "", new { @class = "ml-3 font-weight-bolder" })
+                    </div>
+                }
+                <div class="d-inline-block">@Html.Action("CartPartial", "Cart")</div>
+            </div>
         </div>
     </nav>
     <div class="container-custom">

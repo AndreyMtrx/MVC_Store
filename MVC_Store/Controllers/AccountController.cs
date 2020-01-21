@@ -13,6 +13,81 @@ namespace MVC_Store.Controllers
             return RedirectToAction("Login");
         }
 
+        [ActionName("user-profile")]
+        [HttpGet]
+        public ActionResult UserProfile()
+        {
+            string userName = User.Identity.Name;
+
+            UserProfileViewModel model;
+
+            using (Db db = new Db())
+            {
+                UserDTO userDTO = db.Users.FirstOrDefault(x => x.UserName == userName);
+                model = new UserProfileViewModel(userDTO);
+            }
+
+            return View("UserProfile", model);
+        }
+
+        [ActionName("user-profile")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UserProfile(UserProfileViewModel model)
+        {
+            bool userNameIsChanged = false;
+
+            if (!ModelState.IsValid)
+            {
+                return View("UserProfile", model);
+            }
+
+            if (!string.IsNullOrWhiteSpace(model.Password))
+            {
+                if (!model.Password.Equals(model.ConfirmPassword))
+                {
+                    ModelState.AddModelError("", "Passwords do not match");
+                    return View("UserProfile", model);
+                }
+            }
+
+            using (Db db = new Db())
+            {
+                string userName = User.Identity.Name;
+                if (userName != model.UserName)
+                {
+                    userName = model.UserName;
+                    userNameIsChanged = true;
+                }
+
+                if (db.Users.Where(x => x.Id != model.Id).Any(x => x.UserName == userName))
+                {
+                    ModelState.AddModelError("", $"User name {model.UserName} already exist");
+                    model.UserName = string.Empty;
+                    return View("UserProfile", model);
+                }
+
+                UserDTO userDTO = db.Users.Find(model.Id);
+                userDTO.FirstName = model.FirstName;
+                userDTO.LastName = model.LastName;
+                userDTO.EmailAddress = model.EmailAddress;
+                userDTO.UserName = model.UserName;
+
+                if (!string.IsNullOrWhiteSpace(model.Password))
+                {
+                    userDTO.Password = model.Password;
+                }
+                db.SaveChanges();
+            }
+
+            TempData["SM"] = "You have successfully edited your pprofile";
+
+            if (!userNameIsChanged)
+                return View("UserProfile", model);
+            else
+                return RedirectToAction("Logout");
+        }
+
         [ActionName("create-account")]
         [HttpGet]
         public ActionResult CreateAccount()
@@ -22,6 +97,7 @@ namespace MVC_Store.Controllers
 
         [ActionName("create-account")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult CreateAccount(UserViewModel userViewModel)
         {
             if (!ModelState.IsValid)
@@ -79,6 +155,7 @@ namespace MVC_Store.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Login(LoginUserViewModel loginUser)
         {
             if (!ModelState.IsValid)
@@ -102,10 +179,30 @@ namespace MVC_Store.Controllers
                 }
             }
         }
+
         public ActionResult Logout()
         {
             FormsAuthentication.SignOut();
             return RedirectToAction("Login");
+        }
+
+        public PartialViewResult UserNavPartial()
+        {
+            string userName = User.Identity.Name;
+
+            UserNavPartialViewModel model;
+
+            using (Db db = new Db())
+            {
+                UserDTO userDTO = db.Users.FirstOrDefault(x => x.UserName == userName);
+                model = new UserNavPartialViewModel()
+                {
+                    FirstName = userDTO.FirstName,
+                    LastName = userDTO.LastName
+                };
+            }
+
+            return PartialView("_UserNavPartial", model);
         }
     }
 }

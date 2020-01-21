@@ -4,18 +4,20 @@ using MVC_Store.Models.ViewModels.Shop;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace MVC_Store.Controllers
 {
     public class ShopController : Controller
     {
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             List<ProductViewModel> productVMList;
             using (Db db = new Db())
             {
-                productVMList = db.Products.ToArray().Select(x => new ProductViewModel(x)).ToList();
+                productVMList = await Task.Run(() =>
+                    db.Products.ToArray().Select(x => new ProductViewModel(x)).ToList());
             }
             return View(productVMList);
         }
@@ -89,7 +91,6 @@ namespace MVC_Store.Controllers
 
             string GalleryPath = $"{Server.MapPath("~/Images/Uploads/Products/" + id + "/Gallery/Thumbs")}";
             productViewModel.GalleryImages = Directory.EnumerateFiles(GalleryPath).Select(fn => Path.GetFileName(fn));
-
 
             return View("ProductDetails", productViewModel);
         }
